@@ -1,4 +1,6 @@
 import React from 'react';
+import Stack from 'react-bootstrap/Stack';
+
 
 class NewWordForm extends React.Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class NewWordForm extends React.Component {
 
   handleSubmit(event){
     alert(`new word submitted: ${this.state.wordValue} with definition: ${this.state.definitionValue}`)
+    // TODO: call db function to create new word
     event.preventDefault();
   }
 
@@ -28,7 +31,10 @@ class NewWordForm extends React.Component {
   render() {
     return (
       <div>
-        <h1>Add a new word</h1>
+      <h4>Add a new word:</h4>
+
+        <Stack direction="horizontal" gap={3}>
+
         <form onSubmit={this.handleSubmit}>
           <label>Word</label>
           <input type="text" value={this.state.wordValue} onChange={this.handleWordChange} />
@@ -36,7 +42,8 @@ class NewWordForm extends React.Component {
           <textarea type="text" rows="3" value={this.state.definitionValue} onChange={this.handleDefinitionChange} />
         <input type="submit" value="Submit" />
         </form>
-      </div>
+        </Stack>
+        </div>
       )
   }
 
