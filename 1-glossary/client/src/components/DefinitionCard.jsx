@@ -11,24 +11,15 @@ class DefinitionCard extends React.Component {
   }
 
   handleEdit(e){
-    // use word._id to manage edits
     console.log(`clicked on edit for word ${this.props.word.headword} with id ${this.props.word._id}`);
-    this.props.onEditClick();
+    let _id=(this.props.word._id)
+    this.props.onEditClick(_id);
   }
 
   handleDelete(e){
     console.log(this.props.word._id)
     let _id=(this.props.word._id)
     this.props.onDeleteClick(_id);
-    // use word._id to manage delete
-    // console.log(`clicked on delete for word ${this.props.word.headword} with id ${this.props.word._id}`);
-    // let _id = this.props.word._id;
-    // $.ajax({
-    //   url: '/api/word',
-    //   type: 'DELETE',
-    //   contentType: "application/json",
-    //   data: JSON.stringify({_id})
-    // })
   }
 
   render(){

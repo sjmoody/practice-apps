@@ -8,20 +8,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
 import $ from 'jquery';
-// import db from '../../server/db.js'
-
-
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       words: [],
-      mode: 'Create'
+      mode: 'Create',
+      wordInput: '',
+      definitionInput: '',
+      focusWordId: ''
     }
     this.loadSeedWords=this.loadSeedWords.bind(this);
     this.onEditClick=this.onEditClick.bind(this);
     this.onDeleteClick=this.onDeleteClick.bind(this);
+    this.handleDefinitionChange=this.handleDefinitionChange.bind(this);
+    this.handleWordChange=this.handleWordChange.bind(this);
+    this.handleCreateOrUpdateWord=this.handleCreateOrUpdateWord.bind(this);
+    // this.handleCreateWord=this.handleCreateWord.bind(this);
+    // this.handleUpdateWord=this.handleUpdateWord.bind(this);
   }
 
   onDeleteClick(_id){
@@ -43,9 +48,66 @@ class App extends React.Component {
   }
 
 
-  onEditClick(){
+  onEditClick(_id){
     console.log("Index says edit requested")
     this.setState({mode: 'Edit'})
+    console.log(`attempt to update form state with word id ${_id}`)
+    let targetWord = this.state.words.find(w => w._id === _id)
+    if(targetWord) {
+      this.setState({
+        wordInput: targetWord.headword,
+        definitionInput: targetWord.definition,
+        focusWordId: _id
+      })
+    }
+
+  }
+
+  handleCreateOrUpdateWord(){
+    console.log(`In index. State: ${this.state.mode} focusWordId: ${this.state.focusWordId} wordInput: ${this.state.wordInput} definition: ${this.state.definitionInput}`)
+    if(this.state.mode==='Create'){
+      let payload = {
+        headword: this.state.wordInput,
+        definition: this.state.definitionInput
+      }
+      $.ajax({
+        url: '/api/word',
+        type: 'POST',
+        contentType: "application/json",
+        data: JSON.stringify(payload)
+      })
+      .then((data) => {
+        console.log("maybe created word how do I render")
+      })
+      } else if (this.state.mode==='Edit'){
+          let payload = {
+          _id: this.state.focusWordId,
+          headword: this.state.wordInput,
+          definition: this.state.definitionInput
+        }
+        console.log(`Index will attempt to update word with data ${payload}`);
+
+        $.ajax({
+          url: '/api/word',
+          type: 'PUT',
+          contentType: "application/json",
+          data: JSON.stringify(payload)
+        })
+        .then((data) => {
+          console.log("maybe updated word")
+        })
+      }
+
+    }
+
+
+
+  handleDefinitionChange(e){
+    this.setState({definitionInput: e.target.value})
+  }
+
+  handleWordChange(e){
+    this.setState({wordInput: e.target.value})
   }
 
   loadSeedWords(){
@@ -104,13 +166,19 @@ class App extends React.Component {
     <h1> Glossary app</h1>
     <Stack gap={3}>
     <SearchBar />
-    <NewWordForm />
-    <DefinitionList onDeleteClick={this.onDeleteClick} onEditClick={this.onEditClick} words={this.state.words}/>
-    <Button
-      onClick={()=>console.log("click on this other button")}
-    >Other
+    <NewWordForm
+      mode={this.state.mode}
+      wordInput={this.state.wordInput}
+      definitionInput={this.state.definitionInput}
+      focusWordId={this.state.focusWordId}
 
-    </Button>
+      handleDefinitionChange={this.handleDefinitionChange}
+      handleWordChange={this.handleWordChange}
+      handleCreateOrUpdateWord={this.handleCreateOrUpdateWord}
+      // handleUpdateWord={this.handleUpdateWord}
+      // handleCreateWord={this.handleCreateWord}
+      />
+    <DefinitionList onDeleteClick={this.onDeleteClick} onEditClick={this.onEditClick} words={this.state.words}/>
     <Button
       onClick={this.loadSeedWords}
       >

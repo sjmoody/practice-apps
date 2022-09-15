@@ -55,15 +55,20 @@ const addOne = (doc) => {
 
 }
 
-const editOne = (_id, newDoc) => {
+const editOne = async (_id, newDoc) => {
   // given a doc, find it in db and update it
   console.log(`Attempting to update doc in db: ${_id}`)
-  console.log(`New information for word: ${newDoc}`)
-  // Word.updateOne({doc}, (err, res) => {
+  console.log(`New information for word: ${newDoc.headword} with definition: ${newDoc.definition}`)
+  const res = await Word.replaceOne({_id: _id}, newDoc)
+  console.log(`Count of modified: ${res.nModified}`);
+
+  // )
+  // Word.updateOne({_id: _id}, {newDoc},(err, res) => {
   //   if(err){
   //     console.log(`error: ${err}`);
   //   } else{
   //     console.log(res);
+  //     return(res)
   //   }
   // })
 

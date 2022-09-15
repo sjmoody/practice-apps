@@ -22,6 +22,24 @@ app.post('/api/word', (req, res) => {
 
 app.put('/api/word', (req, res) => {
   console.log(`Attempt to update word with id ${req.body._id}`);
+  console.log(`New word: ${req.body.headword}`)
+  console.log(`New definition: ${req.body.definition}`)
+  let _id = req.body._id;
+  let newDoc = {
+    headword: req.body.headword,
+    definition: req.body.definition
+  }
+  const promise = Promise.resolve(db.editOne(_id, newDoc))
+  .then(() => {
+    console.log("success updating doc. Fetching all results")
+    return db.readAll()
+  })
+  .then((data) => {
+    console.log("new data from db")
+    console.log(data);
+    res.send(data);
+  })
+
 
 })
 
