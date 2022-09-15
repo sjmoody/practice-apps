@@ -6,7 +6,12 @@ import SearchBar from './components/SearchBar.jsx'
 import DefinitionList from './components/DefinitionList.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Stack from 'react-bootstrap/Stack';
-import $ from 'jquery'
+import Button from 'react-bootstrap/Button';
+import $ from 'jquery';
+// import db from '../../server/db.js'
+
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -14,47 +19,51 @@ class App extends React.Component {
       words: [],
       mode: 'Create'
     }
+    this.loadSeedWords=this.loadSeedWords.bind(this);
+    this.onEditClick=this.onEditClick.bind(this);
+    this.onDeleteClick=this.onDeleteClick.bind(this);
   }
 
   onDeleteClick(_id){
-    let seedWords = [
-      {
-        headword: "Java",
-        definition: "delicious coffee"
-      },{
-        headword: "Jest",
-        definition: "a way to joke about testing"
-      },{
-        headword: "Apple",
-        definition: "An often overpriced fruit"
-      },
-      {
-        headword: "Google",
-        definition: "A very large number of killed startups"
-      }
-    ];
-    // console.log("Index says delete requested")
     console.log(`clicked on delete for word with id ${_id}`);
     $.ajax({
       url: '/api/word',
       type: 'DELETE',
       contentType: "application/json",
-      data: JSON.stringify({_id}),
-      success: function(data) {
-        console.log("succeeded to delete");
-        if(!data) {
-          words = seedWords;
-          this.setState({words})
-        } else {
-          words = data.docs;
-          this.setState({words})
-        }
+      data: JSON.stringify({_id})
+    })
+    .then((data) => {
+      if(!data) {
+        console.log(`Nothing from server`);
+      } else {
+        let words = data.docs;
+        this.setState({words});
       }
     })
   }
 
+
   onEditClick(){
     console.log("Index says edit requested")
+    this.setState({mode: 'Edit'})
+  }
+
+  loadSeedWords(){
+    console.log("Request to load seed words")
+    $.get('/api/dataloader')
+    .then((data) => {
+      if (!data) {
+        throw(data);
+      }
+      console.log(`Data returned from load request`);
+      console.log(data.docs);
+      let words = data.docs;
+      this.setState({words});
+    })
+
+    // TODO: request dataLoad via the server
+    // db.dataLoad();
+    // console.log(`words to load: ${words}`)
   }
 
   componentDidMount() {
@@ -97,6 +106,15 @@ class App extends React.Component {
     <SearchBar />
     <NewWordForm />
     <DefinitionList onDeleteClick={this.onDeleteClick} onEditClick={this.onEditClick} words={this.state.words}/>
+    <Button
+      onClick={()=>console.log("click on this other button")}
+    >Other
+
+    </Button>
+    <Button
+      onClick={this.loadSeedWords}
+      >
+      Load Words</Button>
     </Stack>
     </div>
     );

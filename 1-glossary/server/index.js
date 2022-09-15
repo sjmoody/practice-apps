@@ -21,7 +21,8 @@ app.post('/api/word', (req, res) => {
 })
 
 app.put('/api/word', (req, res) => {
-  console.log(`Attempt to update word with id ${req.body._id}`)
+  console.log(`Attempt to update word with id ${req.body._id}`);
+
 })
 
 app.delete('/api/word', (req, res) => {
@@ -32,7 +33,30 @@ app.delete('/api/word', (req, res) => {
     definition: req.body.definition,
     _id: req.body._id
   }
-  db.removeOne(doc)
+  const promise = Promise.resolve(db.removeOne(doc))
+  .then(() => {
+    console.log("success deleting doc. Fetching all results")
+    return db.readAll()
+  })
+  .then((data) => {
+    console.log("new data from db")
+    console.log(data);
+    res.send(data);
+  })
+})
+
+app.get('/api/dataloader', (req, res) => {
+  console.log("request to server to load data");
+  const promise = Promise.resolve(db.dataLoad())
+    .then((data) => {
+      if(!data) {
+        throw(data);
+      }
+      console.log("success loading data")
+      console.log(data)
+      res.send(data);
+    })
+    .catch(err => {console.log(`Error loading new data: ${err}`)})
 })
 
 app.get('/api/words', (req, res) => {

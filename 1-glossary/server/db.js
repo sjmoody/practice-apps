@@ -9,6 +9,32 @@ const wordSchema = new mongoose.Schema({
 
 const Word = mongoose.model('Word', wordSchema);
 
+const dataLoad = async () => {
+  console.log("db request to load many docs")
+  // TODO: delete all and then load data from static
+  await Word.deleteMany({});
+  await Word.insertMany([
+      {
+        headword: "Java",
+        definition: "delicious coffee"
+      },{
+        headword: "Jest",
+        definition: "a way to joke about testing"
+      },{
+        headword: "Apple",
+        definition: "An often overpriced fruit"
+      },
+      {
+        headword: "Google",
+        definition: "A very large number of killed startups"
+      }
+    ]
+  )
+  const query = Word.find({})
+  const docs = await query;
+  return {docs};
+
+}
 
 const readAll = async () => {
   // This function will be called in server to get all documents
@@ -56,3 +82,4 @@ module.exports.readAll = readAll;
 module.exports.addOne = addOne;
 module.exports.editOne = editOne;
 module.exports.removeOne = removeOne;
+module.exports.dataLoad = dataLoad;
