@@ -36,6 +36,16 @@ const dataLoad = async () => {
 
 }
 
+// const promise = Promise.resolve(db.findWhere(q))
+const findWhere = async(q) => {
+  console.log(`in db searching for ${q}`)
+  const query = Word.find({headword: q})
+    // { "headword": {"regex": q, "options": "i"}});
+  const docs = await query;
+  return {docs};
+}
+
+
 const readAll = async () => {
   // This function will be called in server to get all documents
   console.log("Read all requested from mongoose");
@@ -43,7 +53,6 @@ const readAll = async () => {
   const docs = await query;
   console.log(`docs returned`)
   return {docs};
-
 }
 
 const addOne = (doc) => {
@@ -61,26 +70,16 @@ const editOne = async (_id, newDoc) => {
   console.log(`New information for word: ${newDoc.headword} with definition: ${newDoc.definition}`)
   const res = await Word.replaceOne({_id: _id}, newDoc)
   console.log(`Count of modified: ${res.nModified}`);
-
-  // )
-  // Word.updateOne({_id: _id}, {newDoc},(err, res) => {
-  //   if(err){
-  //     console.log(`error: ${err}`);
-  //   } else{
-  //     console.log(res);
-  //     return(res)
-  //   }
-  // })
+  return res;
 
 }
 
-const removeOne = (_id) => {
+const removeOne = async (_id) => {
   // given a doc, remove it from db
   // deleteOne accepts a cb
   console.log(`Attempting to remove doc from db: ${_id}`)
-  Word.deleteOne({_id}, function(err) {
-    if(err) console.log(`error: ${err}`);
-  })
+  const res = await Word.deleteOne({_id})
+  return res;
 }
 
 module.exports.readAll = readAll;
@@ -88,3 +87,4 @@ module.exports.addOne = addOne;
 module.exports.editOne = editOne;
 module.exports.removeOne = removeOne;
 module.exports.dataLoad = dataLoad;
+module.exports.findWhere = findWhere;

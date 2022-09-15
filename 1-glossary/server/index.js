@@ -30,8 +30,8 @@ app.put('/api/word', (req, res) => {
     definition: req.body.definition
   }
   const promise = Promise.resolve(db.editOne(_id, newDoc))
-  .then(() => {
-    console.log("success updating doc. Fetching all results")
+  .then((res) => {
+    console.log(`Result of attempt to update doc: ${res}`)
     return db.readAll()
   })
   .then((data) => {
@@ -52,8 +52,8 @@ app.delete('/api/word', (req, res) => {
     _id: req.body._id
   }
   const promise = Promise.resolve(db.removeOne(doc))
-  .then(() => {
-    console.log("success deleting doc. Fetching all results")
+  .then((res) => {
+    console.log(`Result of attempt to delete: ${res}`)
     return db.readAll()
   })
   .then((data) => {
@@ -77,21 +77,30 @@ app.get('/api/dataloader', (req, res) => {
     .catch(err => {console.log(`Error loading new data: ${err}`)})
 })
 
-app.get('/api/words', (req, res) => {
-  // res.send(`Hello from Express`)
-  // let response = "no response yet"
-  const promise = Promise.resolve(db.readAll())
-  .then((data) => {
-    if(!data) {throw(data)}
-    console.log(`data returned to server: ${data}`);
-    res.send(data);
+app.get(`/api/word`, (req, res) => {
+    // if query use this query
+    let q = req.query.q;
+    console.log(`searching for values matching query ${q}`);
+    const promise = Promise.resolve(db.findWhere(q))
+    .then((data) => {
+      console.log(`data returned to server: ${data}`);
+      res.send(data);
     })
-    .catch(err => {console.log(`Error getting data: ${err}`)})
+    .catch(err => {console.log(`Error searching for ${q}: ${err}`)})
 
-  // res.send(response);
-  // docs.then((data) => console.log(`data returned to server: ${data}`))
-  // console.log("end of get function")
-});
+})
+
+app.get('/api/words', (req, res) => {
+    console.log("no query received")
+    const promise = Promise.resolve(db.readAll())
+    .then((data) => {
+      if(!data) {throw(data)}
+      console.log(`data returned to server: ${data}`);
+      res.send(data);
+      })
+      .catch(err => {console.log(`Error getting data: ${err}`)})
+  });
+
 
 
 app.listen(port, () => {

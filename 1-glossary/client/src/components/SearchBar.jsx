@@ -3,11 +3,14 @@ import React from 'react';
 class SearchBar extends React.Component {
   constructor(props){
     super(props);
-    this.state={value: ''}
+    this.handleChange=this.handleChange.bind(this);
   }
 
+
   handleChange(event){
-    this.setState({value: event.target.value});
+    console.log(`new value of search: ${event.target.value}`)
+    this.props.handleSearchChange(event.target.value);
+    // this.setState({value: event.target.value});
     // TODO: filter list of definitions to match value. May need to rename key
   }
 
@@ -15,7 +18,9 @@ class SearchBar extends React.Component {
     return (
       <div>
         <label>Search for a word</label>
-        <input type="search" value={this.state.value} onChange={this.handleChange}></input>
+        <input type="search"
+        value={this.props.value}
+        onChange={this.handleChange}></input>
       </div>
     )
   }

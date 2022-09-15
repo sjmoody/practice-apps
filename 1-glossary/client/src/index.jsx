@@ -15,9 +15,11 @@ class App extends React.Component {
     this.state = {
       words: [],
       mode: 'Create',
+      searchInput: '',
       wordInput: '',
       definitionInput: '',
-      focusWordId: ''
+      focusWordId: '',
+      filterWords: []
     }
     this.loadSeedWords=this.loadSeedWords.bind(this);
     this.onEditClick=this.onEditClick.bind(this);
@@ -25,8 +27,20 @@ class App extends React.Component {
     this.handleDefinitionChange=this.handleDefinitionChange.bind(this);
     this.handleWordChange=this.handleWordChange.bind(this);
     this.handleCreateOrUpdateWord=this.handleCreateOrUpdateWord.bind(this);
-    // this.handleCreateWord=this.handleCreateWord.bind(this);
-    // this.handleUpdateWord=this.handleUpdateWord.bind(this);
+    this.handleSearchChange=this.handleSearchChange.bind(this);
+
+  }
+
+  handleSearchChange(q){
+    console.log(`Change in search box. Value: ${q}`)
+    this.setState({searchInput: q})
+    q = q.toUpperCase();
+    let filterWords = this.state.words.filter((word) => {
+      let target = word.headword.toUpperCase();
+      return target.includes(q)
+    })
+    this.setState({filterWords});
+
   }
 
   onDeleteClick(_id){
@@ -46,8 +60,6 @@ class App extends React.Component {
       }
     })
   }
-
-
   onEditClick(_id){
     console.log("Index says edit requested")
     this.setState({mode: 'Edit'})
@@ -62,7 +74,6 @@ class App extends React.Component {
     }
 
   }
-
   handleCreateOrUpdateWord(){
     console.log(`In index. State: ${this.state.mode} focusWordId: ${this.state.focusWordId} wordInput: ${this.state.wordInput} definition: ${this.state.definitionInput}`)
     if(this.state.mode==='Create'){
@@ -80,6 +91,13 @@ class App extends React.Component {
         console.log("maybe created word how do I render")
       })
       } else if (this.state.mode==='Edit'){
+        this.setState({
+          mode: 'Create',
+          wordInput: '',
+          definitionInput: '',
+          focusWordId: ''
+
+          })
           let payload = {
           _id: this.state.focusWordId,
           headword: this.state.wordInput,
@@ -94,22 +112,20 @@ class App extends React.Component {
           data: JSON.stringify(payload)
         })
         .then((data) => {
-          console.log("maybe updated word")
+          // expect new set of words
+          let words=data.docs;
+          this.setState({words});
+
         })
       }
 
     }
-
-
-
   handleDefinitionChange(e){
     this.setState({definitionInput: e.target.value})
   }
-
   handleWordChange(e){
     this.setState({wordInput: e.target.value})
   }
-
   loadSeedWords(){
     console.log("Request to load seed words")
     $.get('/api/dataloader')
@@ -122,29 +138,9 @@ class App extends React.Component {
       let words = data.docs;
       this.setState({words});
     })
-
-    // TODO: request dataLoad via the server
-    // db.dataLoad();
-    // console.log(`words to load: ${words}`)
   }
 
   componentDidMount() {
-    let words = [
-      {
-        headword: "Java",
-        definition: "delicious coffee"
-      },{
-        headword: "Jest",
-        definition: "a way to joke about testing"
-      },{
-        headword: "Apple",
-        definition: "An often overpriced fruit"
-      },
-      {
-        headword: "Google",
-        definition: "A very large number of killed startups"
-      }
-    ];
     $.get('/api/words')
     .then((data) => {
       if (!data) {
@@ -152,7 +148,7 @@ class App extends React.Component {
       } else {
         console.log(`Data returned from server`);
         console.log(data.docs);
-        words = data.docs;
+        let words = data.docs;
         this.setState({words});
       }
     })
@@ -165,7 +161,7 @@ class App extends React.Component {
       <div>
     <h1> Glossary app</h1>
     <Stack gap={3}>
-    <SearchBar />
+    <SearchBar handleSearchChange={this.handleSearchChange} value={this.state.searchInput}/>
     <NewWordForm
       mode={this.state.mode}
       wordInput={this.state.wordInput}
@@ -175,10 +171,14 @@ class App extends React.Component {
       handleDefinitionChange={this.handleDefinitionChange}
       handleWordChange={this.handleWordChange}
       handleCreateOrUpdateWord={this.handleCreateOrUpdateWord}
-      // handleUpdateWord={this.handleUpdateWord}
-      // handleCreateWord={this.handleCreateWord}
+
       />
-    <DefinitionList onDeleteClick={this.onDeleteClick} onEditClick={this.onEditClick} words={this.state.words}/>
+    <DefinitionList
+      onDeleteClick={this.onDeleteClick}
+      onEditClick={this.onEditClick}
+      // words={this.state.words}
+      words={this.state.filterWords.length > 0 ? this.state.filterWords : this.state.words}
+      />
     <Button
       onClick={this.loadSeedWords}
       >
