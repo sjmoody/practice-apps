@@ -1,5 +1,6 @@
 import React from 'react';
 import Stack from 'react-bootstrap/Stack';
+import $ from 'jquery';
 
 
 class NewWordForm extends React.Component {
@@ -22,8 +23,23 @@ class NewWordForm extends React.Component {
   }
 
   handleSubmit(event){
-    alert(`new word submitted: ${this.state.wordValue} with definition: ${this.state.definitionValue}`)
-    // TODO: call db function to create new word
+    // alert(`new word submitted: ${this.state.wordValue} with definition: ${this.state.definitionValue}`)
+    // TODO: call post function on server
+    let payload = {
+      headword: this.state.wordValue,
+      definition: this.state.definitionValue
+    }
+    // console.log("sending payload: ")
+    // console.log(payload);
+    // console.log("payload as string:")
+    // console.log(JSON.stringify(payload))
+
+    $.ajax({
+      url: '/api/word',
+      type: 'POST',
+      contentType: "application/json",
+      data: JSON.stringify(payload)
+    })
     event.preventDefault();
   }
 

@@ -32,7 +32,7 @@ class App extends React.Component {
         definition: "A very large number of killed startups"
       }
     ];
-    $.get('/api')
+    $.get('/api/words')
     .then((data) => {
       if (!data) {
         this.setState({words});

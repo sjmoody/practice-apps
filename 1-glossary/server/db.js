@@ -22,31 +22,32 @@ const readAll = async () => {
 
 const addOne = (doc) => {
   // given a doc for a new word, add it to db and save
-  console.log(`Attempting to add doc to db: ${doc}`)
+  console.log(`Attempting to add doc to db: ${doc.headword}`)
   Word.create({headword: doc.headword, definition: doc.definition}, function(err, res) {
     if (err) return handleError(err);
   })
 
 }
 
-const editOne = (doc) => {
+const editOne = (_id, newDoc) => {
   // given a doc, find it in db and update it
-  console.log(`Attempting to update doc in db: ${doc}`)
-  Word.updateOne({doc}, (err, res) => {
-    if(err){
-      console.log(`error: ${err}`);
-    } else{
-      console.log(res);
-    }
-  })
+  console.log(`Attempting to update doc in db: ${_id}`)
+  console.log(`New information for word: ${newDoc}`)
+  // Word.updateOne({doc}, (err, res) => {
+  //   if(err){
+  //     console.log(`error: ${err}`);
+  //   } else{
+  //     console.log(res);
+  //   }
+  // })
 
 }
 
-const removeOne = (doc) => {
+const removeOne = (_id) => {
   // given a doc, remove it from db
   // deleteOne accepts a cb
-  console.log(`Attempting to remove doc from db: ${doc}`)
-  Word.deleteOne({doc}, function(err) {
+  console.log(`Attempting to remove doc from db: ${_id}`)
+  Word.deleteOne({_id}, function(err) {
     if(err) console.log(`error: ${err}`);
   })
 }
