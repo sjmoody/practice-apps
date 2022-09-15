@@ -10,7 +10,7 @@ function DefinitionList(props) {
     <h3>There are {words.length} words to show</h3>
     <div>
       {words.map((word) =>
-      <DefinitionCard key={word._id.toString()} word={word} />
+      <DefinitionCard onEditClick={props.onEditClick} onDeleteClick={props.onDeleteClick} key={word._id.toString()} word={word} />
       )}
     </div>
     </div>

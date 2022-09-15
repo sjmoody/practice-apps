@@ -3,10 +3,6 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import $ from 'jquery';
 
-// TODO: add buttons to edit or delete entry
-// Buttons should map to functions that relay to server
-
-
 class DefinitionCard extends React.Component {
   constructor(props){
     super(props);
@@ -14,21 +10,25 @@ class DefinitionCard extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
   }
 
-  handleEdit(){
+  handleEdit(e){
     // use word._id to manage edits
     console.log(`clicked on edit for word ${this.props.word.headword} with id ${this.props.word._id}`);
+    this.props.onEditClick();
   }
 
-  handleDelete(){
+  handleDelete(e){
+    console.log(this.props.word._id)
+    let _id=(this.props.word._id)
+    this.props.onDeleteClick(_id);
     // use word._id to manage delete
-    console.log(`clicked on delete for word ${this.props.word.headword} with id ${this.props.word._id}`);
-    let _id = this.props.word._id;
-    $.ajax({
-      url: '/api/word',
-      type: 'DELETE',
-      contentType: "application/json",
-      data: JSON.stringify({_id})
-    })
+    // console.log(`clicked on delete for word ${this.props.word.headword} with id ${this.props.word._id}`);
+    // let _id = this.props.word._id;
+    // $.ajax({
+    //   url: '/api/word',
+    //   type: 'DELETE',
+    //   contentType: "application/json",
+    //   data: JSON.stringify({_id})
+    // })
   }
 
   render(){
@@ -40,7 +40,16 @@ class DefinitionCard extends React.Component {
       {this.props.word.definition}
       </Card.Text>
       </Card.Body>
-      <Card.Footer><Button onClick={this.handleEdit}>Edit</Button>  <Button onClick={this.handleDelete}>Delete</Button></Card.Footer>
+      <Card.Footer>
+        <Button
+          onClick={this.handleEdit}>
+            Edit
+        </Button>
+        <Button
+          onClick={this.handleDelete}>
+            Delete
+        </Button>
+        </Card.Footer>
     </Card>
     )
   }
