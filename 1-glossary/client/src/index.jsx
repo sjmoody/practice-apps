@@ -6,7 +6,7 @@ import SearchBar from './components/SearchBar.jsx'
 import DefinitionList from './components/DefinitionList.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Stack from 'react-bootstrap/Stack';
-
+import $ from 'jquery'
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +16,7 @@ class App extends React.Component {
   }
 
   componentDidMount(){
+    //TODO: get words from db
     let words = [
       {
         headword: "Java",
@@ -32,6 +33,10 @@ class App extends React.Component {
         definition: "A very large number of killed startups"
       }
     ];
+    $.get('/api')
+    // .then((response) => response.json())
+    .then((data) => console.log(`Data returned from server: ${data}`));
+
     this.setState({words})
   }
   render() {

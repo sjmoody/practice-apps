@@ -13,14 +13,11 @@ const Word = mongoose.model('Word', wordSchema);
 const readAll = async () => {
   // This function will be called in server to get all documents
   console.log("Read all requested from mongoose");
-  Word.find({}, function(err, docs) {
-    if(err) {
-      console.log(`Error: ${err}`)
-    } else {
-      console.log(`Success. Docs: ${docs}`);
-      return docs;
-    }
-  })
+  const query = Word.find({})
+  const docs = await query;
+  console.log(`docs returned`)
+  return {docs};
+
 }
 
 const addOne = (doc) => {
