@@ -15,8 +15,7 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount(){
-    //TODO: get words from db
+  componentDidMount() {
     let words = [
       {
         headword: "Java",
@@ -34,11 +33,19 @@ class App extends React.Component {
       }
     ];
     $.get('/api')
-    // .then((response) => response.json())
-    .then((data) => console.log(`Data returned from server: ${data}`));
-
-    this.setState({words})
+    .then((data) => {
+      if (!data) {
+        this.setState({words});
+      } else {
+        console.log(`Data returned from server`);
+        console.log(data.docs);
+        words = data.docs;
+        this.setState({words});
+      }
+    })
   }
+
+
   render() {
 
     return (
