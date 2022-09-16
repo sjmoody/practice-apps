@@ -5,7 +5,14 @@ import React from 'react';
 // - Next button to change state to F2
 class F1 extends React.Component {
   render() {
-    return <h4>F1 component. Should display name, email, and password form for account creation</h4>
+    return (
+      <div>
+      <h4>F1 component. Should display name, email, and password form for account creation</h4>
+      <button onClick={this.props.handleSubmit}>Next</button>
+    </div>
+    )
+
+
   }
 
 }

@@ -5,7 +5,12 @@ import React from 'react'
 
 class F3 extends React.Component {
   render() {
-    return <h4>F3 Component. Collects credit card expiry and cvv and billing</h4>
+    return (
+      <div>
+        <h4>F3 Component. Collects credit card expiry and cvv and billing</h4>
+        <button onClick={this.props.handleSubmit}>Next</button>
+      </div>
+    )
   }
 }
 
