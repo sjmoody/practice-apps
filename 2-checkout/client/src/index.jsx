@@ -9,13 +9,27 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      stage: 'Home'
+      stage: 'Home',
+      name: '',
+      email: '',
+      password: ''
     }
     this.handleCheckout = this.handleCheckout.bind(this);
     this.handleCreateAccount = this.handleCreateAccount.bind(this);
     this.handleCollectShipping = this.handleCollectShipping.bind(this);
     this.handleCollectBilling = this.handleCollectBilling.bind(this);
     this.handlePurchaseConfirmation = this.handlePurchaseConfirmation.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event){
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    console.log(`Change to input. Name: ${name} and new value: ${value}`)
+    this.setState({
+      [name]:value
+    })
   }
 
   handleCheckout(){
@@ -25,22 +39,31 @@ class App extends React.Component {
 
   handleCreateAccount(){
     console.log("Button pressed on F1. Will attempt to save account details here")
+    console.log(`State of account. Name: ${this.state.name} Email: ${this.state.email} Password: ${this.state.password}`)
     this.setState({stage: 'F2'})
+    event.preventDefault();
+
   }
 
   handleCollectShipping(){
     console.log("Button pressed on F2. Will attempt to save shipping details here")
     this.setState({stage: 'F3'})
+    event.preventDefault();
+
   }
 
   handleCollectBilling(){
     console.log("Button pressed on F3. Will attempt to save billing details.")
     this.setState({stage: 'Confirmation'})
+    event.preventDefault();
+
   }
 
   handlePurchaseConfirmation(){
     console.log("Button pressed on confirmation. Will attempt to purchase and return to homepage")
     this.setState({stage:"Home"})
+    event.preventDefault();
+
   }
 
   render() {
@@ -58,7 +81,12 @@ class App extends React.Component {
     } else if (stage === 'F1') {
       return (
         <div>
-          <F1 handleSubmit={this.handleCreateAccount}/>
+          <F1
+            name={this.state.name}
+            email={this.state.email}
+            password={this.state.password}
+            handleInputChange={this.handleInputChange}
+            handleSubmit={this.handleCreateAccount}/>
           <p>
           <code>Page Cookie is: {JSON.stringify(document.cookie, undefined, "\t")}</code>
           </p>
@@ -89,7 +117,11 @@ class App extends React.Component {
     } else if (stage === 'Confirmation') {
       return (
         <div>
-          <Confirmation handleSubmit={this.handlePurchaseConfirmation} />
+          <Confirmation
+            name={this.state.name}
+            email={this.state.email}
+            password={this.state.password}
+            handleSubmit={this.handlePurchaseConfirmation} />
           <p>
           <code>Page Cookie is: {JSON.stringify(document.cookie, undefined, "\t")}</code>
           </p>

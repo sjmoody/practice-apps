@@ -5,26 +5,11 @@ import React from 'react';
 class F1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      name: '',
-      email: '',
-      password: ''
-    }
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
   }
 
   render() {
+    let handleInputChange = this.props.handleInputChange;
     return (
       <div>
       <h4>F1 component. Should display name, email, and password form for account creation</h4>
@@ -32,13 +17,28 @@ class F1 extends React.Component {
         <label>
           Name:
         </label>
-        <input type="text" value={this.state.value} onChange={this.handleInputChange} />
+        <input
+          name="name"
+          type="text"
+          value={this.props.name}
+          // value={this.state.value}
+          onChange={handleInputChange} />
 
         <label>Email</label>
-        <input type="text" value={this.state.value} onChange={this.handleInputChange} />
+        <input
+          name="email"
+          type="text"
+          value={this.props.email}
+          // value={this.state.value}
+          onChange={handleInputChange} />
 
         <label>Password</label>
-        <input type="password" value={this.state.value} onChange={this.handleInputChange} />
+        <input
+          name="password"
+          type="password"
+          value={this.props.password}
+          // value={this.state.value}
+          onChange={handleInputChange} />
         <input type="submit" value="Next" />
       </form>
     </div>

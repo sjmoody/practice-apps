@@ -61,7 +61,7 @@ class F3 extends React.Component {
 
         <input type="submit" value="Next" />
         </form>
-        <button onClick={this.props.handleSubmit}>Next</button>
+
       </div>
     )
   }
