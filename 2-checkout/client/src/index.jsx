@@ -4,6 +4,7 @@ import F1 from "./components/F1.jsx"
 import F2 from "./components/F2.jsx"
 import F3 from "./components/F3.jsx"
 import Confirmation from "./components/Confirmation.jsx"
+import axios from 'axios';
 
 class App extends React.Component {
   constructor(props){
@@ -32,6 +33,7 @@ class App extends React.Component {
     this.handleCollectBilling = this.handleCollectBilling.bind(this);
     this.handlePurchaseConfirmation = this.handlePurchaseConfirmation.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.expressCheckout = this.expressCheckout.bind(this);
   }
 
   handleInputChange(event){
@@ -74,11 +76,56 @@ class App extends React.Component {
   }
 
   handlePurchaseConfirmation(){
-    console.log("Button pressed on confirmation. Will attempt to purchase and return to homepage")
-    this.setState({stage:"Home"})
+    // console.log("Button pressed on confirmation. Will attempt to purchase and return to homepage")
+    alert("Purchase request submitted");
     event.preventDefault();
-
+    let purchaseObj = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      line1: this.state.line1,
+      line2: this.state.line2,
+      city: this.state.city,
+      state: this.state.state,
+      shippingZip: this.state.shippingZip,
+      phone: this.state.phone,
+      ccNum: this.state.ccNum,
+      expiry: this.state.expiry,
+      cvv: this.state.cvv,
+      billingZip: this.state.billingZip
+    }
+    axios.post('/purchase', purchaseObj)
+      .then((res) => {
+        console.log(res);
+        alert(`Purchase successful.`)
+        this.setState({stage:"Home"})
+      })
+      .catch((err) => {
+        console.log('error making purchase')
+        alert(`error making purchase please try again. ${err}`);
+      })
   }
+
+  expressCheckout(){
+    console.log("Will express checkout")
+    this.setState({
+      name: 'Steven Moody',
+      email: 'smoody07@gmail.com',
+      password: 'asdasd',
+      line1: '3710 El Camino Real',
+      line2: 'Apt 6919',
+      city: 'Santa Clara',
+      state: 'CA',
+      shippingZip: '95051',
+      phone: '17028868834',
+      ccNum: '234234',
+      expiry: '2022-01-01',
+      cvv: '4564',
+      billingZip: '95060'
+    });
+    this.handlePurchaseConfirmation();
+  }
+
 
   render() {
     let stage = this.state.stage;
@@ -89,6 +136,7 @@ class App extends React.Component {
           <p>
           <code>Page Cookie is: {JSON.stringify(document.cookie, undefined, "\t")}</code>
           <button onClick={this.handleCheckout}>Checkout</button>
+          <button onClick={this.expressCheckout}>Express Checkout</button>
           </p>
         </div>
       );
