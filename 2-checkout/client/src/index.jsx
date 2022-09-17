@@ -79,7 +79,7 @@ class App extends React.Component {
     // console.log("Button pressed on confirmation. Will attempt to purchase and return to homepage")
     alert("Purchase request submitted");
     event.preventDefault();
-    let purchaseObj = details || {
+    let purchaseObj =  {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
@@ -94,6 +94,8 @@ class App extends React.Component {
       cvv: this.state.cvv,
       billingZip: this.state.billingZip
     }
+    console.log("JSX sending purchase info. ");
+    console.log(purchaseObj);
     axios.post('/purchase', purchaseObj)
       .then((res) => {
         console.log(res);
@@ -136,7 +138,7 @@ class App extends React.Component {
           <p>
           <code>Page Cookie is: {JSON.stringify(document.cookie, undefined, "\t")}</code>
           <button onClick={this.handleCheckout}>Checkout</button>
-          <button onClick={this.expressCheckout}>Express Checkout</button>
+          {/* <button onClick={this.expressCheckout}>Express Checkout</button> */}
           </p>
         </div>
       );
