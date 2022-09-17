@@ -75,11 +75,11 @@ class App extends React.Component {
 
   }
 
-  handlePurchaseConfirmation(){
+  handlePurchaseConfirmation(details){
     // console.log("Button pressed on confirmation. Will attempt to purchase and return to homepage")
     alert("Purchase request submitted");
     event.preventDefault();
-    let purchaseObj = {
+    let purchaseObj = details || {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
@@ -108,7 +108,7 @@ class App extends React.Component {
 
   expressCheckout(){
     console.log("Will express checkout")
-    this.setState({
+    let details = {
       name: 'Steven Moody',
       email: 'smoody07@gmail.com',
       password: 'asdasd',
@@ -122,8 +122,8 @@ class App extends React.Component {
       expiry: '2022-01-01',
       cvv: '4564',
       billingZip: '95060'
-    });
-    this.handlePurchaseConfirmation();
+    }
+    this.handlePurchaseConfirmation(details);
   }
 
 
