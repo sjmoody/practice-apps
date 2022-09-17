@@ -9,12 +9,13 @@ class F1 extends React.Component {
   }
 
   render() {
-    let handleInputChange = this.props.handleInputChange;
+    const handleInputChange = this.props.handleInputChange;
     return (
       <div>
       <h4>F1 component. Should display name, email, and password form for account creation</h4>
       <form onSubmit={this.props.handleSubmit}>
-        <label>
+      <div>
+      <label>
           Name:
         </label>
         <input
@@ -23,22 +24,28 @@ class F1 extends React.Component {
           value={this.props.name}
           // value={this.state.value}
           onChange={handleInputChange} />
+          </div>
 
-        <label>Email</label>
+<div>
+<label>Email</label>
         <input
           name="email"
           type="text"
           value={this.props.email}
           // value={this.state.value}
           onChange={handleInputChange} />
+          </div>
 
-        <label>Password</label>
+<div>
+<label>Password</label>
         <input
           name="password"
           type="password"
           value={this.props.password}
           // value={this.state.value}
           onChange={handleInputChange} />
+          </div>
+
         <input type="submit" value="Next" />
       </form>
     </div>

@@ -6,59 +6,67 @@ import React from 'react'
 class F3 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      ccNum: '',
-      expiry: '',
-      cvv: '',
-      billingZip: ''
-    }
-    this.handleInputChange = this.handleInputChange.bind(this);
+    // this.state = {
+    //   ccNum: '',
+    //   expiry: '',
+    //   cvv: '',
+    //   billingZip: ''
+    // }
+    // this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+  // handleInputChange(event) {
+  //   const target = event.target;
+  //   const value = target.value;
+  //   const name = target.name;
 
-    this.setState({
-      [name]: value
-    })
-  }
+  //   this.setState({
+  //     [name]: value
+  //   })
+  // }
 
 
   render() {
+    const handleInputChange = this.props.handleInputChange;
+
     return (
       <div>
         <h4>F3 Component. Collects credit card expiry and cvv and billing</h4>
         <form onSubmit={this.props.handleSubmit}>
+        <div>
         <label>Credit Card: </label>
         <input
           type="text"
           name="ccNum"
-          value={this.state.ccNum}
-          onChange={this.handleInputChange} />
-
+          value={this.props.ccNum}
+          onChange={handleInputChange} />
+        </div>
+        <div>
         <label>Expiration Date</label>
         <input
           type="date"
           name="expiry"
-          value={this.state.expiry}
-          onChange={this.handleInputChange} />
+          value={this.props.expiry}
+          onChange={handleInputChange} />
+        </div>
 
+        <div>
         <label>CVV: </label>
         <input
           type="text"
           name="cvv"
-          value={this.state.cvv}
-          onChange={this.handleInputChange} />
+          value={this.props.cvv}
+          onChange={handleInputChange} />
+        </div>
 
+        <div>
         <label>Billing Zip: </label>
         <input
           type="text"
           name="billingZip"
-          value={this.state.billingZip}
-          onChange={this.handleInputChange}/>
-
+          value={this.props.billingZip}
+          onChange={handleInputChange}/>
+          </div>
         <input type="submit" value="Next" />
         </form>
 

@@ -7,76 +7,66 @@ import React from 'react'
 class F2 extends React.Component {
   constructor(props){
     super(props);
-    this.state={
-      line1: '',
-      line2: '',
-      city: '',
-      state: '',
-      zip: '',
-      phone: ''
-    }
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  handleInputChange(event){
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({
-      [name] : value
-    });
 
   }
 
   render() {
+    const handleInputChange = this.props.handleInputChange;
+
     return (
      <div>
       <h4>Please enter your shipping details</h4>
       <form onSubmit={this.props.handleSubmit}>
+        <div>
         <label>Address Line 1</label>
         <input
           type='text'
-          value={this.state.value}
+          value={this.props.line1}
           name="line1"
-          onChange={this.handleInputChange} />
-
+          onChange={handleInputChange} />
+        </div>
+        <div>
         <label>Address Line 2</label>
         <input
           name="line2"
           type='text'
-          value={this.state.value}
-          onChange={this.handleInputChange} />
-
+          value={this.props.line2}
+          onChange={handleInputChange} />
+        </div>
+        <div>
         <label>City</label>
         <input
           name="city"
           type='text'
-          value={this.state.value}
-          onChange={this.handleInputChange} />
+          value={this.props.city}
+          onChange={handleInputChange} />
+        </div>
+        <div>
         <label>State</label>
         <input
           name="state"
           type='text'
-          value={this.state.value}
-          onChange={this.handleInputChange} />
-
+          value={this.props.state}
+          onChange={handleInputChange} />
+        </div>
+        <div>
         <label>Zip</label>
         <input
-          name="zip"
+          name="shippingZip"
           type='text'
-          value={this.state.value}
-          onChange={this.handleInputChange} />
-
+          value={this.props.shippingZip}
+          onChange={handleInputChange} />
+        </div>
+        <div>
         <label>Phone</label>
         <input
           name='phone'
           type='text'
-          value={this.state.value}
-          onChange={this.handleInputChange} />
+          value={this.props.phone}
+          onChange={handleInputChange} />
+        </div>
         <input type="submit" value="next" />
       </form>
-      {/* <button onClick={this.props.handleSubmit}>Next</button> */}
      </div>
     )
   }

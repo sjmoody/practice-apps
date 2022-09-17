@@ -12,7 +12,19 @@ class App extends React.Component {
       stage: 'Home',
       name: '',
       email: '',
-      password: ''
+      password: '',
+
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      shippingZip: '',
+      phone: '',
+
+      ccNum: '',
+      expiry: '',
+      cvv: '',
+      billingZip: ''
     }
     this.handleCheckout = this.handleCheckout.bind(this);
     this.handleCreateAccount = this.handleCreateAccount.bind(this);
@@ -47,6 +59,7 @@ class App extends React.Component {
 
   handleCollectShipping(){
     console.log("Button pressed on F2. Will attempt to save shipping details here")
+    console.log(`State of account. Line 1: ${this.state.line1} Line2: ${this.state.line2} City: ${this.state.city} State: ${this.state.state} Zip: ${this.state.shippingZip} Phone: ${this.state.phone}`)
     this.setState({stage: 'F3'})
     event.preventDefault();
 
@@ -54,6 +67,7 @@ class App extends React.Component {
 
   handleCollectBilling(){
     console.log("Button pressed on F3. Will attempt to save billing details.")
+    console.log(`State of Billing. CC#: ${this.state.ccNum} Expires: ${this.state.expiry} CVV: ${this.state.cvv} Zip: ${this.state.billingZip}`)
     this.setState({stage: 'Confirmation'})
     event.preventDefault();
 
@@ -97,7 +111,15 @@ class App extends React.Component {
     } else if (stage === 'F2') {
       return (
         <div>
-          <F2 handleSubmit={this.handleCollectShipping}/>
+          <F2
+            line1={this.state.line1}
+            line2={this.state.line2}
+            city={this.state.city}
+            state={this.state.state}
+            shippingZip={this.state.shippingZip}
+            phone={this.state.phone}
+            handleInputChange={this.handleInputChange}
+            handleSubmit={this.handleCollectShipping}/>
           <p>
           <code>Page Cookie is: {JSON.stringify(document.cookie, undefined, "\t")}</code>
           </p>
@@ -107,7 +129,14 @@ class App extends React.Component {
     } else if (stage === 'F3') {
       return (
         <div>
-          <F3 handleSubmit={this.handleCollectBilling}/>
+          <F3
+            ccNum={this.state.ccNum}
+            expiry={this.state.expiry}
+            cvv={this.state.cvv}
+            billingZip={this.state.billingZip}
+            handleInputChange={this.handleInputChange}
+
+            handleSubmit={this.handleCollectBilling}/>
           <p>
           <code>Page Cookie is: {JSON.stringify(document.cookie, undefined, "\t")}</code>
           </p>
@@ -121,6 +150,16 @@ class App extends React.Component {
             name={this.state.name}
             email={this.state.email}
             password={this.state.password}
+            line1={this.state.line1}
+            line2={this.state.line2}
+            city={this.state.city}
+            state={this.state.state}
+            shippingZip={this.state.shippingZip}
+            phone={this.state.phone}
+            ccNum={this.state.ccNum}
+            expiry={this.state.expiry}
+            cvv={this.state.cvv}
+            billingZip={this.state.billingZip}
             handleSubmit={this.handlePurchaseConfirmation} />
           <p>
           <code>Page Cookie is: {JSON.stringify(document.cookie, undefined, "\t")}</code>
